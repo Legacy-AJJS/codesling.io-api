@@ -14,12 +14,7 @@ import {
 
 export const addChallengeController = async (req, res) => {
   try {
-    /**
-     * 
-     */
-    console.log(req.body)
     const { rows } = await addChallengeQuery(req.body);
-    console.log(rows[0].id)
     success('addChallengeController - successfully added challenge ', rows[0]);
     req.body.challenge_id = rows[0].id;
     await addUserChallengeQuery(req.body);
