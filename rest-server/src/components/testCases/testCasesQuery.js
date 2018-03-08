@@ -7,8 +7,9 @@ import {
   error
 } from '../../lib/log';
 
-export const addTestCaseQuery = async (body) => {
+export const addTestCaseQuery = async (test, id) => {
   try {
+    let body = {content: test, challenge_id: id};
     const queryString = addTestCaseHelper(body);
     const data = db.queryAsync(queryString);
     success('addTestCaseQuery - successfully added test case ', data);
