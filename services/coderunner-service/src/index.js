@@ -4,6 +4,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import tmp from 'tmp';
 import cors from 'cors';
+
+import axios from 'axios';
+
 // import vm from 'vm';
 
 import { success } from './lib/log';
@@ -14,9 +17,12 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post('/submit-code', (req, res) => {
+app.post('/submit-code', async (req, res) => {
+  // Get test cases
+  const tests = await axios.get(`http://localhost:3396/api/testCases/8`);
+
   tmp.file({ postfix: '.js' }, (errCreatingTmpFile, path) => {
-    writeFile(path, req.body.code, (errWritingFile) => {
+    writeFile(path, `${req.body.code}\n${tests.data.content}`, (errWritingFile) => {
       if (errWritingFile) {
         res.send(errWritingFile);
       } else {
