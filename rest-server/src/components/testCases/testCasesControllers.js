@@ -20,9 +20,9 @@ export const addTestCaseController = async (req, res) => {
 export const getTestCaseController = async (req, res) => {
   try {
     let id = parseInt(req.params.id);
-    const data = await getTestCaseQuery(id);
-    success('getTestCaseController - successfully fetched test case ', data);
-    return res.status(200).send(data);
+    let {rows} = await getTestCaseQuery(id)
+    success('getTestCaseController - successfully fetched test case ', rows[0]);
+    return res.status(200).send(rows[0]);
   } catch (err) {
     error('getTestCaseController - error= ', err);
   }
