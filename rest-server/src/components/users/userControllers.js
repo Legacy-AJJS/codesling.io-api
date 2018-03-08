@@ -8,6 +8,7 @@ import {
 } from '../../lib/log';
 
 export const fetchAllUserController = async (req, res) => {
+  //res.send('hello')
   try {
     const data = await fetchAllUserQuery();
     success('fetchAllUserController - successfully fetched data ', data);
