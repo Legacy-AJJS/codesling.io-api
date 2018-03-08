@@ -23,4 +23,3 @@ export const fetchAllFriendsHelper = ({ user_id }) => {
       WHERE f.user_id=${user_id}
   `;
 };
-
