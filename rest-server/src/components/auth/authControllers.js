@@ -43,3 +43,14 @@ export const loginController = async (req, res) => {
     throw new Error(err);
   }
 };
+
+export const logoutController = async (req, res) => {
+  try {
+    req.logout();
+    res.send('successfully logged out');
+    success('logoutController - successfully logged out');
+  } catch (err) {
+    error('logoutController - error= ', err);
+    throw new Error(err);
+  }
+};
