@@ -1,5 +1,6 @@
 import {
-  addTestCaseQuery
+  addTestCaseQuery,
+  getTestCaseQuery
 } from './testCasesQuery';
 import {
   success,
@@ -13,5 +14,16 @@ export const addTestCaseController = async (req, res) => {
     return res.status(200).send(data);
   } catch (err) {
     error('addTestCaseController - error= ', err);
+  }
+};
+
+export const getTestCaseController = async (req, res) => {
+  try {
+    let id = parseInt(req.params.id);
+    const data = await getTestCaseQuery(id);
+    success('getTestCaseController - successfully fetched test case ', data);
+    return res.status(200).send(data);
+  } catch (err) {
+    error('getTestCaseController - error= ', err);
   }
 };
