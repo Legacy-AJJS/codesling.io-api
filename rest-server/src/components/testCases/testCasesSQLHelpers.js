@@ -1,8 +1,10 @@
+import { escape } from 'pg-escape';
+
 export const addTestCaseHelper = ({ content, challenge_id }) => {
-  return `
+  return escape(`
     INSERT INTO testCases (content, challenge_id)
     VALUES ('${content}', ${challenge_id})
-  `;
+  `);
 };
 
 export const getTestCaseHelper = (challenge_id) => {
