@@ -15,6 +15,8 @@ import { success } from './lib/log';
 const ifEqual = (input, output) =>
   `if (hello(${input}) === ${output}) {
     console.log('SUCCESS');
+  } else {
+    console.log('FAILURE');
   }`;
 
 const app = express();
