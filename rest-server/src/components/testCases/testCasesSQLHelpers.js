@@ -1,10 +1,10 @@
-import { escape } from 'pg-escape';
+const escape = require('pg-escape');
 
 export const addTestCaseHelper = ({ content, challenge_id }) => {
-  return escape(`
+  return `
     INSERT INTO testCases (content, challenge_id)
-    VALUES ('${content}', ${challenge_id})
-  `);
+    VALUES (${escape.literal(content)}, ${challenge_id})
+  `;
 };
 
 export const getTestCaseHelper = (challenge_id) => {
