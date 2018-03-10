@@ -18,7 +18,12 @@ export const addChallengeController = async (req, res) => {
     success('addChallengeController - successfully added challenge ', rows[0]);
     req.body.challenge_id = rows[0].id;
     await addUserChallengeQuery(req.body);
-    await addTestCaseQuery(req.body.testCase, rows[0].id);
+
+    // for (let i = 0; i < req.body.ins.length; i++) {
+    //   await addTestCaseQuery('[req.body.ins[i], req.body.outs[i]]', rows[0].id);
+    // }
+
+    await addTestCaseQuery(req.body.testCases, rows[0].id);
     success('addUserChallengeQuery - successfully added user challenge ');
     return res.status(200).send(rows[0]);
   } catch (err) {

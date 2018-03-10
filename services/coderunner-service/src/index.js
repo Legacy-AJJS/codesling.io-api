@@ -12,12 +12,15 @@ import axios from 'axios';
 import { success } from './lib/log';
 
 // Evalute true if passes test
-const ifEqual = (input, output) =>
-  `if (hello(${input}) === ${output}) {
-    console.log('SUCCESS');
-  } else {
-    console.log('FAILURE');
-  }`;
+const ifEqual = (testcases) =>
+  testcases.reduce((acc, [input, output]) => {
+    return acc + `\n
+    if (hello(${input}) === ${output}) {
+      console.log('SUCCESS');
+    } else {
+      console.log('FAILURE');
+    }`
+  }, '')
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -28,10 +31,10 @@ app.use(bodyParser.json());
 app.post('/submit-code', async (req, res) => {
   // Get test cases
   const tests = await axios.get(`http://localhost:3396/api/testCases/${req.body.id}`);
-  const [input, output] = JSON.parse(tests.data.content);
-
+  const parsed = JSON.parse(tests.data.content);
+  const testcases = Object.entries(parsed);
   tmp.file({ postfix: '.js' }, (errCreatingTmpFile, path) => {
-    writeFile(path, `${req.body.code}\n${ifEqual(input, output)}`, (errWritingFile) => {
+    writeFile(path, `${req.body.code}\n${ifEqual(testcases)}`, (errWritingFile) => {
       if (errWritingFile) {
         res.send(errWritingFile);
       } else {
