@@ -12,3 +12,11 @@ export const fetchUserHelper = (user_id) => {
     WHERE id=${user_id}
   `;
 };
+
+export const fetchUserByEmailHelper = (user_email) => {
+  return `
+    SELECT id
+    FROM users
+    WHERE email='${user_email}'
+  `;
+};
