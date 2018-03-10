@@ -28,9 +28,16 @@ app.use(bodyParser.json());
 app.post('/submit-code', async (req, res) => {
   // Get test cases
   const tests = await axios.get(`http://localhost:3396/api/testCases/${req.body.id}`);
-  const [input, output] = JSON.parse(tests.data.content);
-
+  const parsed = JSON.parse(tests.data.content);
+  const testcases = Object.entries(parsed);
+  console.log(testcases);
   tmp.file({ postfix: '.js' }, (errCreatingTmpFile, path) => {
+    let input = '';
+    let output = '';
+    testcases.forEach((test) => {
+      input += test[0];
+      output += test[1];
+    });
     writeFile(path, `${req.body.code}\n${ifEqual(input, output)}`, (errWritingFile) => {
       if (errWritingFile) {
         res.send(errWritingFile);
