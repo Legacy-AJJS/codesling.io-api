@@ -7,6 +7,8 @@ import {
   serverLeave,
   serverRun,
   serverMessage,
+  serverEmail,
+  serverDisconnect
 } from './serverEvents';
 
 /**
@@ -63,12 +65,55 @@ const clientMessage = async ({ io, room }, payload) => {
   }
 };
 
+const clientRecordHistory = async ({ io, room }, payload) => {
+  const { challenge, winner, loser, time } = payload;
+
+  try {
+    success('posting history for this challenge');
+    const winnerData = await axios.get(`http://localhost:3396/api/users/fetchUserByEmail/${winner}`);
+    const winnerId = winnerData.data.rows[0].id;
+
+    const loserData = await axios.get(`http://localhost:3396/api/users/fetchUserByEmail/${loser}`);
+    const loserId = loserData.data.rows[0].id;
+
+    let winnerHistory = {
+      outcome: 1,
+      time: time,
+      clout: 0,
+      user_id: winnerId,
+      challenger_id: loserId,
+      challenge_id: challenge.id
+    }
+
+    let loserHistory = {
+      outcome: 0,
+      time: time,
+      clout: 0,
+      user_id: loserId,
+      challenger_id: winnerId,
+      challenge_id: challenge.id
+    }
+
+    await axios.post(`http://localhost:3396/api/history/addHistory`, winnerHistory);
+    await axios.post(`http://localhost:3396/api/history/addHistory`, loserHistory);
+
+    serverDisconnect({ io, room });
+
+  } catch (e) {
+    success('error posting history to database. e= ', e);
+  }
+
+};
+
+
+
 const clientEmitters = {
   'client.ready': clientReady,
   'client.update': clientUpdate,
   'client.disconnect': clientDisconnect,
   'client.run': clientRun,
   'client.message': clientMessage,
+  'client.recordHistory': clientRecordHistory
 };
 
 export default clientEmitters;

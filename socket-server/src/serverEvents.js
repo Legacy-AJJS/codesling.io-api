@@ -3,7 +3,11 @@
  *  Server emissions
  *
  */
+
+
+
 export const serverInitialState = ({ client, room }, payload) => {
+  //console.log(client.id)
   if (!room.get('challenge')) {
     room.set('challenge', payload);
     client.emit('server.initialState', {
@@ -46,3 +50,10 @@ export const serverMessage = ({ io, room }, message) => {
     .in(room.get('id'))
     .emit('server.message', message);
 };
+
+export const serverDisconnect = ({ io, room }) => {
+  io
+    .in(room.get('id'))
+    .emit('server.disconnect');
+};
+
